@@ -17,7 +17,7 @@ ENV CONFIG_FILE=/etc/caddy/Caddyfile
 
 RUN \
   # 在根目录引用 /etc/caddy/Caddyfile 以让 caddy 相关命令自动发现
-  echo "" > ${CONFIG_FILE} && \
+  echo "" > /etc/caddy/Caddyfile && \
   # 安装 tzdata 以使用 TZ 环境变量设置时区
   apk add --no-cache --update tzdata
 
