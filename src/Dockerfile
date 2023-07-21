@@ -4,8 +4,6 @@ ARG CADDY_VERSION=2.6.4
 
 FROM caddy:$CADDY_VERSION-builder-alpine AS builder
 
-ENV CONFIG_FILE /etc/caddy/Caddyfile
-
 RUN xcaddy build \
   --with github.com/caddy-dns/dnspod \
   --with github.com/mholt/caddy-l4
@@ -15,6 +13,7 @@ FROM caddy:$CADDY_VERSION-alpine
 
 # 默认中国时区
 ENV TZ=Asia/Shanghai
+ENV CONFIG_FILE=/etc/caddy/Caddyfile
 
 RUN \
   # 在根目录引用 /etc/caddy/Caddyfile 以让 caddy 相关命令自动发现
