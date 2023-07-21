@@ -1,0 +1,50 @@
+name: 手动构建
+
+env:
+  TZ: Asia/Shanghai
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'caddy 版本'
+        required: true
+        default: 'latest'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: 手动构建
+
+    steps:
+    - name: 获取 version
+      id: getVersion
+      run: |
+        if [ ${{ github.event.inputs.version }} == "latest" ]
+        then
+          version="$((curl -L \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/${vars.CADDY_REPO}/releases/latest) \
+          | jq -r '.tag_name')"
+        else
+          version=${{ github.event.inputs.version }}
+        fi
+        echo "version=${version}" >> $GITHUB_OUTPUT
+        echo "version: $version"
+
+    - name: 触发构建
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.ACCESS_TOKEN }}
+        event-type: 手动构建 ${{ steps.getVersion.outputs.version }}
+        client-payload: '{"version": "${{ steps.getVersion.outputs.version }}"}'
+        
+    - name: 删除旧的 workflows
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        token: ${{ secrets.ACCESS_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: 1
+        keep_minimum_runs: 4
