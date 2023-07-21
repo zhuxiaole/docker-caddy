@@ -55,7 +55,7 @@ jobs:
         run: |
           VERSION=${{matrix.version}}
           echo ${VERSION} > lastversion.txt
-          if git status --porcelain | grep lastversion.txt then
+          if git status --porcelain | grep lastversion.txt; then
             git add lastversion.txt
             git commit -am "${VERSION}"
             git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/${MY_REPO}.git"
