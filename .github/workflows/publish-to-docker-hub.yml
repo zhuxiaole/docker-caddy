@@ -59,6 +59,7 @@ jobs:
             echo "push=true" >> $GITHUB_OUTPUT
           else
             echo "nothing to commit"
+          fi
 
       - name: Push changes
         if: steps.commit.outputs.push == 'true'
