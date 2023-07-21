@@ -6,6 +6,7 @@ on:
 env:
   TZ: Asia/Shanghai
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+  MY_REPO: ${{ vars.MY_REPO }}
 
 jobs:
   build:
@@ -54,7 +55,7 @@ jobs:
           if git status --porcelain | grep lastversion.txt then
             git add lastversion.txt
             git commit -am "${VERSION}"
-            git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/${{ vars.MY_REPO }}.git"
+            git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/${MY_REPO}.git"
           else
             echo "nothing to commit"
             exit 0
