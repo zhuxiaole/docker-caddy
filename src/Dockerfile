@@ -15,13 +15,15 @@ FROM caddy:$CADDY_VERSION-alpine
 ENV TZ=Asia/Shanghai
 ENV CONFIG_FILE=/etc/caddy/Caddyfile
 
-# 安装 tzdata 以使用 TZ 环境变量设置时区
-RUN apk add --no-cache --update tzdata
+RUN \
+  # 在/etc/caddy/Caddyfile生成默认配置文件
+  echo "" > /etc/caddy/Caddyfile && \
+  # 安装 tzdata 以使用 TZ 环境变量设置时区
+  apk add --no-cache --update tzdata
 
 WORKDIR /
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
-COPY ./Caddyfile /etc/caddy/Caddyfile
 COPY ./snippets/dnspod /etc/caddy/dnspod
 COPY ./snippets/security /etc/caddy/security
 COPY ./entrypoint.sh /entrypoint.sh
