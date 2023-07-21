@@ -4,8 +4,11 @@ ARG CADDY_VERSION=2.6.4
 
 FROM caddy:$CADDY_VERSION-builder-alpine AS builder
 
+ENV CONFIG_FILE /etc/caddy/Caddyfile
+
 RUN xcaddy build \
-  --with github.com/caddy-dns/dnspod
+  --with github.com/caddy-dns/dnspod \
+  --with github.com/mholt/caddy-l4
 
 ###### 镜像 ######
 FROM caddy:$CADDY_VERSION-alpine
@@ -15,7 +18,7 @@ ENV TZ=Asia/Shanghai
 
 RUN \
   # 在根目录引用 /etc/caddy/Caddyfile 以让 caddy 相关命令自动发现
-  echo "import /etc/caddy/Caddyfile" > /Caddyfile && \
+  echo "" > ${CONFIG_FILE} && \
   # 安装 tzdata 以使用 TZ 环境变量设置时区
   apk add --no-cache --update tzdata
 
