@@ -42,20 +42,12 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Build and push armdocker images
+            - name: Build and push docker images
               run: |
                   VERSION=${{matrix.version}}
                   VERSION=${VERSION#*v}
                   docker buildx build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile --platform linux/arm64/v8 -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} ./src
                   docker buildx build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile --platform linux/amd64 -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} ./src
-                  docker push ${IMAGE_NAME}:${VERSION}
-                  docker push ${IMAGE_NAME}:latest
-
-            - name: Build and push docker images
-              run: |
-                  VERSION=${{matrix.version}}
-                  VERSION=${VERSION#*v}
-                  docker build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} ./src
                   docker push ${IMAGE_NAME}:${VERSION}
                   docker push ${IMAGE_NAME}:latest
 
