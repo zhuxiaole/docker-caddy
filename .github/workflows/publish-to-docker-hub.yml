@@ -46,10 +46,8 @@ jobs:
               run: |
                   VERSION=${{matrix.version}}
                   VERSION=${VERSION#*v}
-                  docker buildx build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile --platform linux/arm64/v8 -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} ./src
-                  docker buildx build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile --platform linux/amd64 -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} ./src
-                  docker push ${IMAGE_NAME}:${VERSION}
-                  docker push ${IMAGE_NAME}:latest
+                  docker buildx build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile --platform linux/arm64/v8 -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest --push ./src
+                  docker buildx build --build-arg CADDY_VERSION=${VERSION} -f ./src/Dockerfile --platform linux/amd64 -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest --push ./src
 
             - name: commit lastversion.txt
               id: commit
