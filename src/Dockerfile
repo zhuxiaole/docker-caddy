@@ -1,11 +1,11 @@
 ###### 构建 ######
 
-ARG CADDY_VERSION=2.6.4
+ARG CADDY_VERSION=2.10.0
 
 FROM caddy:$CADDY_VERSION-builder-alpine AS builder
 
 RUN xcaddy build \
-  --with github.com/caddy-dns/dnspod \
+  --with github.com/caddy-dns/tencentcloud \
   --with github.com/caddy-dns/alidns \
   --with github.com/mholt/caddy-l4
 
@@ -15,7 +15,8 @@ FROM caddy:$CADDY_VERSION-alpine
 # 默认中国时区
 ENV TZ=Asia/Shanghai
 ENV CONFIG_FILE=/etc/caddy/Caddyfile
-ENV DNSPOD_API_KEY=
+ENV TENCENTCLOUD_SECRET_ID=
+ENV TENCENTCLOUD_SECRET_KEY=
 ENV ALIYUN_ACCESS_KEY_ID=
 ENV ALIYUN_ACCESS_KEY_SECRET=
 
@@ -28,7 +29,7 @@ RUN \
 WORKDIR /
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
-COPY ./snippets/dnspod /etc/caddy/dnspod
+COPY ./snippets/tencentcloud /etc/caddy/tencentcloud
 COPY ./snippets/alidns /etc/caddy/alidns
 COPY ./snippets/security /etc/caddy/security
 COPY ./entrypoint.sh /entrypoint.sh

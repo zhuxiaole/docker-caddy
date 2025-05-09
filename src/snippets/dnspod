@@ -1,3 +1,0 @@
-tls {
-  dns dnspod {env.DNSPOD_API_KEY}
-}

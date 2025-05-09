@@ -10,7 +10,7 @@ Web 服务器 Caddy 2 的 Docker 镜像。
 
 - [特性](#特性)
   - [支持设置时区](#支持设置时区)
-  - [支持 DNSPod](#支持-dnspod)
+  - [支持 TencentCloud 和 AliDns](#支持-tencentcloud-和-alidns)
   - [内置安全相关的 HTTP 响应头](#内置安全相关的-http-响应头)
   - [支持使用 host.docker.internal 访问宿主服务](#支持使用-hostdockerinternal-访问宿主服务)
 - [许可](#许可)
@@ -25,21 +25,21 @@ Web 服务器 Caddy 2 的 Docker 镜像。
 
 你可通过环境变量 `TZ` 设置时区，若不设置，默认是：`Asia/Shanghai`。
 
-### 支持 DNSPod
+### 支持 TencentCloud 和 AliDns
 
-支持使用 [DNSPod](https://www.dnspod.cn/) 作为 DNS 提供者，并内置 [`dnspod`](https://github.com/zhuxiaole/docker-caddy/blob/master/src/snippets/dnspod) 片段方便导入：
+支持使用 TencentCloud 和 AliDns 作为 DNS 提供者，并内置 [`tencentcloud`](https://github.com/zhuxiaole/docker-caddy/blob/master/src/snippets/tencentcloud) 和 [`alidns`](https://github.com/zhuxiaole/docker-caddy/blob/master/src/snippets/alidns) 和  片段方便导入：
 
 ```ini
 # Caddyfile
 
 www.foo.bar {
-  import dnspod
+  import tencentcloud
 
   respond "hello caddy"
 }
 ```
 
-**注意：** 使用这项功能之前，你得先通过环境变量 `DNSPOD_API_KEY` 设置 DNSPod 的鉴权信息，格式是 `ID,Token`，比如 `10086,1b68f307ee4e5adb10od31d4d4v42dla`。
+**注意：** 使用这项功能之前，你得先通过环境变量 `TENCENTCLOUD_SECRET_ID` 和 `TENCENTCLOUD_SECRET_KEY` 设置 TencentCloud 的鉴权信息。或者通过环境变量 `ALIYUN_ACCESS_KEY_ID` 和 `ALIYUN_ACCESS_KEY_SECRET` 设置 AliDns 的鉴权信息。
 
 ### 内置安全相关的 HTTP 响应头
 
@@ -49,7 +49,7 @@ www.foo.bar {
 # Caddyfile
 
 www.foo.bar {
-  import dnspod
+  import tencentcloud
   import security
 
   respond "hello caddy"
@@ -62,7 +62,7 @@ www.foo.bar {
 # Caddyfile
 
 api.foo.bar {
-  import dnspod
+  import tencentcloud
   import security
 
   reverse_proxy host.docker.internal:4000

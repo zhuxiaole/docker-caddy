@@ -1,5 +1,5 @@
 local.qingzhou.io {
-  import dnspod
+  import tencentcloud
   import security
 
   respond "hello caddy"

@@ -1,13 +1,18 @@
-version: '3'
-
 services:
   caddy:
-    build: ../src
+    image: zhuxiaole1992/caddy:latest
+    container_name: caddy
+    restart: always
     ports:
       - 80:80
       - 443:443
-    env_file:
-      - ./.env
+    environment:
+      - TZ=Asia/Shanghai
+      - CONFIG_FILE=/etc/caddy/Caddyfile
+      - TENCENTCLOUD_SECRET_ID=xxxxxx
+      - TENCENTCLOUD_SECRET_KEY=xxxxxx
+      - ALIYUN_ACCESS_KEY_ID=xxxxxx
+      - ALIYUN_ACCESS_KEY_SECRET=xxxxxx
     volumes:
       - ./data/data:/data
       - ./data/config:/config
